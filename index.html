@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>テーマで学ぶ talk talk 韓国語</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@300;400;500;600;700&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#fffaf8;
+  --surface:#ffffff;
+  --accent:#1a4a35;
+  --accent2:#2d6e52;
+  --accent-light:#e8f3ee;
+  --text:#1a4a35;
+  --text2:#4a7060;
+  --border:#e0d8d0;
+  --danger:#c0392b;
+  --warning:#b7770d;
+  --success:#1a6640;
+  --sakura:#f9d0d8;
+  --sakura2:#e8b8c4;
+  --font-jp:'M PLUS 2',sans-serif;
+  --font-kr:'Nanum Gothic',sans-serif;
+}
+html,body{height:100%;font-family:var(--font-jp);background:var(--bg);color:var(--text);}
+body{display:flex;flex-direction:column;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;}
+
+.sakura-bg{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.sakura-bg svg{width:100%;height:100%;}
+
+.screen{display:none;flex:1;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
+.screen.active{display:flex;}
+
+/* ── START ── */
+#screen-start{align-items:center;justify-content:center;gap:20px;padding:24px 24px;min-height:100vh;}
+.start-logo{text-align:center;}
+.start-logo .hangul{font-family:var(--font-kr);font-size:72px;font-weight:800;color:var(--accent);line-height:1;letter-spacing:-3px;text-shadow:0 2px 20px rgba(26,74,53,.15);}
+.start-logo .subtitle{font-family:var(--font-jp);font-size:14px;color:var(--text2);margin-top:6px;letter-spacing:.08em;}
+.start-lesson{background:rgba(255,255,255,.88);border:1.5px solid var(--sakura2);border-radius:16px;padding:16px 20px;width:100%;max-width:360px;}
+.start-lesson-title{font-size:13px;color:var(--text2);margin-bottom:10px;letter-spacing:.05em;font-weight:600;}
+.lesson-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.lesson-btn{padding:11px 0;border:1.5px solid var(--sakura2);border-radius:10px;background:#fff;color:var(--accent);font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;font-family:var(--font-jp);}
+.lesson-btn:hover,.lesson-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.lesson-btn:disabled{opacity:.35;cursor:not-allowed;}
+.mode-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:360px;}
+.mode-btn{padding:18px 24px;border-radius:18px;border:none;cursor:pointer;font-size:17px;font-weight:700;display:flex;align-items:center;gap:16px;transition:all .25s;font-family:var(--font-jp);box-shadow:0 4px 20px rgba(26,74,53,.12);}
+.mode-btn-teacher{background:rgba(255,255,255,.95);color:var(--accent);border:2px solid var(--sakura2);}
+.mode-btn-student{background:var(--accent);color:#fff;}
+.mode-btn:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(26,74,53,.2);}
+.mode-icon{font-size:28px;flex-shrink:0;}
+.mode-text-main{font-size:17px;font-weight:700;}
+.mode-text-sub{font-size:11px;opacity:.7;font-weight:400;margin-top:2px;}
+
+/* ── HEADER ── */
+.app-header{background:rgba(255,255,255,.92);border-bottom:1px solid var(--sakura2);padding:16px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
+.btn-back{background:var(--accent);color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:16px;padding:11px 20px;font-weight:700;font-family:var(--font-jp);display:flex;align-items:center;gap:4px;transition:all .2s;flex-shrink:0;}
+.btn-back:hover{background:var(--accent2);}
+.header-title{flex:1;font-size:17px;font-weight:700;color:var(--text);font-family:var(--font-jp);}
+.header-badge{background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;border:1px solid var(--accent);}
+
+/* ── TAB BAR (둥근 버튼) ── */
+.tab-bar{display:flex;gap:12px;background:rgba(255,255,255,.85);border-bottom:1px solid var(--sakura2);padding:14px 20px;}
+.tab-btn{flex:1;padding:15px 0;border:2px solid var(--border);border-radius:16px;background:#fff;font-size:17px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;font-family:var(--font-jp);}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 4px 12px rgba(26,74,53,.2);}
+.tab-btn:hover:not(.active){border-color:var(--accent);color:var(--accent);}
+
+/* ── TEACHER DRILL ── */
+.drill-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 24px;gap:36px;}
+.drill-card{background:rgba(255,255,255,.95);border-radius:28px;width:100%;max-width:380px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 8px 36px rgba(26,74,53,.10);border:2px solid var(--sakura2);}
+.drill-char{font-family:var(--font-kr);font-size:148px;font-weight:800;color:var(--accent);line-height:1;}
+.drill-char.word{font-size:110px;}
+.drill-char.word-lg{font-size:72px;}
+.drill-hint{font-family:var(--font-jp);font-size:18px;color:var(--text2);margin-top:12px;font-weight:500;}
+.btn-next-drill{background:var(--accent);color:#fff;border:none;border-radius:20px;padding:22px 64px;font-size:20px;font-weight:700;cursor:pointer;transition:all .2s;font-family:var(--font-jp);box-shadow:0 6px 20px rgba(26,74,53,.25);}
+.btn-next-drill:hover{background:#0f3322;transform:translateY(-2px);}
+.drill-counter{font-size:15px;color:var(--text2);font-weight:600;}
+
+/* ── STUDENT HOME ── */
+#screen-student-home{align-items:center;justify-content:center;padding:0;}
+.student-home-title{font-size:24px;font-weight:800;color:var(--accent);text-align:center;font-family:var(--font-jp);margin-bottom:4px;}
+.step-cards{display:flex;flex-direction:column;gap:16px;width:100%;max-width:360px;padding:0 20px;}
+.step-card{border-radius:18px;padding:18px 20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:16px;box-shadow:0 4px 16px rgba(26,74,53,.15);min-height:76px;}
+.step-card.c1-card{background:#fff;border:2px solid var(--sakura2);}
+.step-card.c2-card{background:var(--accent);border:2px solid var(--accent);}
+.step-card.c3-card{background:#fff;border:2px solid var(--sakura2);}
+.step-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,74,53,.22);}
+.step-card-icon{font-size:26px;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-card-icon.c1{background:#e8f3ee;}
+.step-card-icon.c2{background:rgba(255,255,255,.2);}
+.step-card-icon.c3{background:#f0f4ff;}
+.step-card-name{font-size:15px;font-weight:700;font-family:var(--font-jp);white-space:nowrap;}
+.step-card-name.light{color:#fff;}
+.step-card-name.dark{color:var(--accent);}
+.step-card-desc{font-size:12px;margin-top:3px;font-family:var(--font-jp);white-space:nowrap;}
+.step-card-desc.light{color:rgba(255,255,255,.75);}
+.step-card-desc.dark{color:var(--text2);}
+
+/* ── STEP CONTENT ── */
+.step-content{flex:1;padding:24px 20px;display:flex;flex-direction:column;gap:20px;overflow-y:auto;}
+
+/* ── STEP 1 ── */
+.card-big{background:rgba(255,255,255,.95);border-radius:22px;padding:36px 24px;display:flex;flex-direction:column;align-items:center;gap:18px;box-shadow:0 4px 18px rgba(26,74,53,.08);border:1.5px solid var(--sakura2);}
+.char-display{font-family:var(--font-kr);font-size:100px;font-weight:800;color:var(--accent);line-height:1;}
+.char-display.word-size{font-size:100px;}
+.char-display.word-size-lg{font-size:64px;}
+.jp-label{font-family:var(--font-jp);font-size:18px;color:var(--text2);font-weight:500;}
+.btn-speak{background:var(--accent-light);color:var(--accent);border:2px solid var(--accent);border-radius:50px;padding:15px 36px;font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;font-family:var(--font-jp);min-width:160px;justify-content:center;}
+.btn-speak:hover{background:var(--accent);color:#fff;}
+.btn-speak.speaking{background:var(--accent);color:#fff;animation:pulse .6s infinite alternate;}
+@keyframes pulse{from{opacity:1;}to{opacity:.65;}}
+.progress-bar-wrap{width:100%;background:var(--border);border-radius:99px;height:7px;overflow:hidden;}
+.progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .3s;}
+.nav-row{display:flex;gap:12px;width:100%;}
+.btn-nav{flex:1;padding:16px;border-radius:14px;border:none;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;font-family:var(--font-jp);}
+.btn-prev{background:var(--accent-light);color:var(--accent);border:2px solid var(--accent);}
+.btn-next-s{background:var(--accent);color:#fff;}
+.btn-nav:hover{opacity:.85;transform:translateY(-1px);}
+.item-count{text-align:center;font-size:14px;color:var(--text2);font-weight:600;}
+
+/* ── STEP 2: 듣고 고르기 ── */
+.quiz-header{display:flex;align-items:center;justify-content:space-between;padding:4px 0;}
+.quiz-score{font-size:14px;color:var(--text2);font-weight:600;}
+.quiz-score span{font-weight:800;color:var(--accent);}
+.timer-bar-wrap{width:100%;background:var(--border);border-radius:99px;height:9px;overflow:hidden;}
+.timer-bar{height:100%;background:var(--accent2);border-radius:99px;transition:width .1s linear;}
+.timer-bar.danger{background:var(--danger);}
+.quiz-card{background:rgba(255,255,255,.95);border-radius:22px;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:20px;box-shadow:0 4px 18px rgba(26,74,53,.08);border:1.5px solid var(--sakura2);}
+.quiz-instruction{font-family:var(--font-jp);font-size:17px;color:var(--text2);text-align:center;font-weight:500;line-height:1.6;}
+.btn-quiz-speak{background:var(--accent);color:#fff;border:none;border-radius:50px;padding:18px 44px;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;font-family:var(--font-jp);box-shadow:0 4px 14px rgba(26,74,53,.25);}
+.btn-quiz-speak:hover{background:#0f3322;}
+/* 가로 배치 정사각형 버튼 */
+.choices{display:flex;flex-direction:row;gap:12px;width:100%;justify-content:center;}
+.choice-btn{flex:1;aspect-ratio:1;max-width:96px;background:#fff;border:2.5px solid var(--border);border-radius:16px;font-family:var(--font-kr);font-size:28px;font-weight:800;color:var(--accent);cursor:pointer;transition:all .2s;text-align:center;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(26,74,53,.06);}
+.choice-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+.choice-btn.correct{background:#d4f4e0;border-color:var(--success);color:var(--success);}
+.choice-btn.wrong{background:#fde8e8;border-color:var(--danger);color:var(--danger);}
+.choice-btn.disabled{pointer-events:none;}
+.quiz-result{background:rgba(255,255,255,.95);border-radius:22px;padding:44px 24px;display:flex;flex-direction:column;align-items:center;gap:16px;box-shadow:0 4px 18px rgba(26,74,53,.08);border:1.5px solid var(--sakura2);text-align:center;}
+.result-emoji{font-size:68px;}
+.result-score{font-size:52px;font-weight:800;color:var(--accent);font-family:var(--font-kr);}
+.result-label{font-size:17px;color:var(--text2);font-family:var(--font-jp);}
+.result-detail{font-size:15px;color:var(--text2);font-family:var(--font-jp);}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:16px 44px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;transition:all .2s;font-family:var(--font-jp);}
+.btn-retry:hover{background:#0f3322;}
+
+/* ── STEP 3: 듣고 쓰기 ── */
+.dictation-card{background:rgba(255,255,255,.95);border-radius:22px;padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:20px;box-shadow:0 4px 18px rgba(26,74,53,.08);border:1.5px solid var(--sakura2);}
+.q-number{background:var(--accent);color:#fff;font-size:13px;font-weight:700;padding:5px 14px;border-radius:20px;font-family:var(--font-jp);}
+.dictation-instruction{font-family:var(--font-jp);font-size:17px;color:var(--text2);text-align:center;line-height:1.75;font-weight:500;}
+.answer-reveal{background:var(--accent-light);border:2.5px solid var(--accent);border-radius:18px;padding:22px 36px;text-align:center;display:none;}
+.answer-reveal.show{display:block;}
+.answer-reveal .answer-char{font-family:var(--font-kr);font-size:68px;font-weight:800;color:var(--accent);}
+.answer-reveal .answer-jp{font-family:var(--font-jp);font-size:15px;color:var(--text2);margin-top:6px;}
+.btn-reveal{background:var(--warning);color:#fff;border:none;border-radius:14px;padding:16px 32px;font-size:16px;font-weight:700;cursor:pointer;width:100%;transition:all .2s;font-family:var(--font-jp);}
+.btn-reveal:hover{opacity:.85;}
+.btn-next-dict{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:16px 32px;font-size:16px;font-weight:700;cursor:pointer;width:100%;display:none;transition:all .2s;font-family:var(--font-jp);}
+.btn-next-dict.show{display:block;}
+.btn-next-dict:hover{opacity:.85;}
+</style>
+</head>
+<body>
+
+<!-- 벚꽃 배경 (네 모서리) -->
+<div class="sakura-bg">
+<svg viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <!-- 벚꽃 한 송이: 꽃잎 5장 -->
+  <g id="f1"><!-- 꽃잎 하나: 아몬드 모양 -->
+    <ellipse cx="0" cy="-18" rx="7" ry="16" fill="#fbd0dc"/>
+  </g>
+  <!-- 벚꽃 꽃 심 -->
+  <g id="bloom">
+    <ellipse cx="0"   cy="-18" rx="7"  ry="16" fill="#fce0e8"/>
+    <ellipse cx="0"   cy="-18" rx="7"  ry="16" fill="#fce0e8" transform="rotate(72)"/>
+    <ellipse cx="0"   cy="-18" rx="7"  ry="16" fill="#fce0e8" transform="rotate(144)"/>
+    <ellipse cx="0"   cy="-18" rx="7"  ry="16" fill="#fce0e8" transform="rotate(216)"/>
+    <ellipse cx="0"   cy="-18" rx="7"  ry="16" fill="#fce0e8" transform="rotate(288)"/>
+    <ellipse cx="0"   cy="-18" rx="5"  ry="13" fill="#f8c0d0" transform="rotate(36)"/>
+    <ellipse cx="0"   cy="-18" rx="5"  ry="13" fill="#f8c0d0" transform="rotate(108)"/>
+    <ellipse cx="0"   cy="-18" rx="5"  ry="13" fill="#f8c0d0" transform="rotate(180)"/>
+    <ellipse cx="0"   cy="-18" rx="5"  ry="13" fill="#f8c0d0" transform="rotate(252)"/>
+    <ellipse cx="0"   cy="-18" rx="5"  ry="13" fill="#f8c0d0" transform="rotate(324)"/>
+    <circle cx="0" cy="0" r="4" fill="#f9a8c0"/>
+  </g>
+</defs>
+
+<!-- ▌왼쪽 위 모서리 가지 -->
+<g opacity="0.82">
+  <!-- 가지 -->
+  <path d="M-10,0 Q20,40 45,90" stroke="#c87890" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M45,90 Q30,130 18,170" stroke="#c87890" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M45,90 Q70,120 85,155" stroke="#c87890" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M18,170 Q8,200 2,230" stroke="#c87890" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M18,170 Q35,195 42,220" stroke="#c87890" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M85,155 Q100,180 108,205" stroke="#c87890" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- 꽃송이 -->
+  <use href="#bloom" transform="translate(2,233) scale(0.9)"/>
+  <use href="#bloom" transform="translate(18,238) scale(0.75)"/>
+  <use href="#bloom" transform="translate(42,224) scale(0.8)"/>
+  <use href="#bloom" transform="translate(108,208) scale(0.85)"/>
+  <use href="#bloom" transform="translate(88,158) scale(0.7)"/>
+  <use href="#bloom" transform="translate(20,172) scale(0.65)"/>
+  <use href="#bloom" transform="translate(48,93) scale(0.72)"/>
+  <use href="#bloom" transform="translate(30,88) scale(0.6)"/>
+  <use href="#bloom" transform="translate(-2,62) scale(0.55)"/>
+  <!-- 꽃봉오리 -->
+  <ellipse cx="55" cy="97" rx="5" ry="8" fill="#f8b8cc" opacity=".7" transform="rotate(-20 55 97)"/>
+  <ellipse cx="100" cy="183" rx="4" ry="7" fill="#f8b8cc" opacity=".7" transform="rotate(10 100 183)"/>
+</g>
+
+<!-- ▌오른쪽 위 모서리 가지 -->
+<g opacity="0.82">
+  <path d="M400,0 Q370,40 345,90" stroke="#c87890" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M345,90 Q360,130 372,170" stroke="#c87890" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M345,90 Q320,120 305,155" stroke="#c87890" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M372,170 Q382,200 388,230" stroke="#c87890" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M372,170 Q355,195 348,220" stroke="#c87890" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M305,155 Q290,180 282,205" stroke="#c87890" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <use href="#bloom" transform="translate(388,233) scale(0.9)"/>
+  <use href="#bloom" transform="translate(372,238) scale(0.75)"/>
+  <use href="#bloom" transform="translate(348,224) scale(0.8)"/>
+  <use href="#bloom" transform="translate(282,208) scale(0.85)"/>
+  <use href="#bloom" transform="translate(302,158) scale(0.7)"/>
+  <use href="#bloom" transform="translate(370,172) scale(0.65)"/>
+  <use href="#bloom" transform="translate(342,93) scale(0.72)"/>
+  <use href="#bloom" transform="translate(360,88) scale(0.6)"/>
+  <use href="#bloom" transform="translate(402,62) scale(0.55)"/>
+  <ellipse cx="335" cy="97" rx="5" ry="8" fill="#f8b8cc" opacity=".7" transform="rotate(20 335 97)"/>
+  <ellipse cx="290" cy="183" rx="4" ry="7" fill="#f8b8cc" opacity=".7" transform="rotate(-10 290 183)"/>
+</g>
+
+<!-- ▌왼쪽 아래 모서리 가지 -->
+<g opacity="0.82">
+  <path d="M-10,844 Q20,804 45,754" stroke="#c87890" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M45,754 Q28,714 15,674" stroke="#c87890" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M45,754 Q72,724 88,689" stroke="#c87890" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M15,674 Q5,644 0,614" stroke="#c87890" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M15,674 Q32,648 40,622" stroke="#c87890" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M88,689 Q105,662 112,636" stroke="#c87890" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <use href="#bloom" transform="translate(0,610) scale(0.9)"/>
+  <use href="#bloom" transform="translate(16,610) scale(0.75)"/>
+  <use href="#bloom" transform="translate(40,618) scale(0.8)"/>
+  <use href="#bloom" transform="translate(112,632) scale(0.85)"/>
+  <use href="#bloom" transform="translate(90,686) scale(0.7)"/>
+  <use href="#bloom" transform="translate(17,670) scale(0.65)"/>
+  <use href="#bloom" transform="translate(47,750) scale(0.72)"/>
+  <use href="#bloom" transform="translate(28,756) scale(0.6)"/>
+  <ellipse cx="6" cy="644" rx="4" ry="7" fill="#f8b8cc" opacity=".7" transform="rotate(15 6 644)"/>
+  <ellipse cx="100" cy="664" rx="4" ry="7" fill="#f8b8cc" opacity=".7" transform="rotate(-12 100 664)"/>
+</g>
+
+<!-- ▌오른쪽 아래 모서리 가지 -->
+<g opacity="0.82">
+  <path d="M400,844 Q370,804 345,754" stroke="#c87890" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M345,754 Q362,714 375,674" stroke="#c87890" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M345,754 Q318,724 302,689" stroke="#c87890" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M375,674 Q385,644 390,614" stroke="#c87890" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M375,674 Q358,648 350,622" stroke="#c87890" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M302,689 Q285,662 278,636" stroke="#c87890" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <use href="#bloom" transform="translate(390,610) scale(0.9)"/>
+  <use href="#bloom" transform="translate(374,610) scale(0.75)"/>
+  <use href="#bloom" transform="translate(350,618) scale(0.8)"/>
+  <use href="#bloom" transform="translate(278,632) scale(0.85)"/>
+  <use href="#bloom" transform="translate(300,686) scale(0.7)"/>
+  <use href="#bloom" transform="translate(373,670) scale(0.65)"/>
+  <use href="#bloom" transform="translate(343,750) scale(0.72)"/>
+  <use href="#bloom" transform="translate(362,756) scale(0.6)"/>
+  <ellipse cx="384" cy="644" rx="4" ry="7" fill="#f8b8cc" opacity=".7" transform="rotate(-15 384 644)"/>
+  <ellipse cx="290" cy="664" rx="4" ry="7" fill="#f8b8cc" opacity=".7" transform="rotate(12 290 664)"/>
+</g>
+</svg>
+</div>
+
+<!-- START -->
+<div id="screen-start" class="screen active">
+  <div class="start-logo">
+    <div class="hangul">한글</div>
+    <div class="subtitle">テーマで学ぶ talk talk 韓国語</div>
+  </div>
+  <div class="start-lesson">
+    <div class="start-lesson-title">課を選択してください</div>
+    <div class="lesson-btns">
+      <button class="lesson-btn active">1</button>
+      <button class="lesson-btn">2</button>
+      <button class="lesson-btn">3</button>
+      <button class="lesson-btn">4</button>
+      <button class="lesson-btn">5</button>
+      <button class="lesson-btn">6</button>
+      <button class="lesson-btn">7</button>
+      <button class="lesson-btn">8</button>
+      <button class="lesson-btn">9</button>
+    </div>
+  </div>
+  <div class="mode-btns">
+    <button class="mode-btn mode-btn-teacher" onclick="goTeacher()">
+      <span class="mode-icon">📽️</span>
+      <div class="mode-text" style="text-align:left;">
+        <div class="mode-text-main">教師モード</div>
+        <div class="mode-text-sub">ランダムドリル（プロジェクター用）</div>
+      </div>
+    </button>
+    <button class="mode-btn mode-btn-student" onclick="goStudentHome()">
+      <span class="mode-icon">📱</span>
+      <div class="mode-text" style="text-align:left;">
+        <div class="mode-text-main">学生モード</div>
+        <div class="mode-text-sub">個人練習・クイズ</div>
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- TEACHER -->
+<div id="screen-teacher" class="screen">
+  <div class="app-header">
+    <button class="btn-back" onclick="goStart()">← 戻る</button>
+    <div class="header-title">教師モード</div>
+    <div class="header-badge">第1課</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="setTeacherTab('syllable',this)">音節</button>
+    <button class="tab-btn" onclick="setTeacherTab('word',this)">単語</button>
+  </div>
+  <div class="drill-area">
+    <div class="drill-card">
+      <div class="drill-char" id="drill-char">？</div>
+      <div class="drill-hint" id="drill-hint">ボタンを押してスタート</div>
+    </div>
+    <div class="drill-counter" id="drill-counter"></div>
+    <button class="btn-next-drill" onclick="nextDrill()">▶ 次へ</button>
+  </div>
+</div>
+
+<!-- STUDENT HOME -->
+<div id="screen-student-home" class="screen">
+  <div class="app-header" style="position:static;">
+    <button class="btn-back" onclick="goStart()">← 戻る</button>
+    <div class="header-title">学生モード</div>
+    <div class="header-badge">第1課</div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;padding:40px 0;">
+    <div>
+      <div class="student-home-title">練習メニュー</div>
+      <div style="font-size:14px;color:var(--text2);margin-top:6px;text-align:center;font-family:var(--font-jp);">ステップを選んでください</div>
+    </div>
+    <div class="step-cards">
+      <div class="step-card c1-card" onclick="goStep(1)">
+        <div class="step-card-icon c1">🔊</div>
+        <div>
+          <div class="step-card-name dark">STEP 1　聞いてリピート</div>
+          <div class="step-card-desc dark">音声を聞いて自分のペースで練習</div>
+        </div>
+      </div>
+      <div class="step-card c2-card" onclick="goStep(2)">
+        <div class="step-card-icon c2">🎯</div>
+        <div>
+          <div class="step-card-name light">STEP 2　聞いて選ぶ</div>
+          <div class="step-card-desc light">音声を聞いて正しい文字を選ぼう</div>
+        </div>
+      </div>
+      <div class="step-card c1-card" onclick="goStep(3)">
+        <div class="step-card-icon c3">✏️</div>
+        <div>
+          <div class="step-card-name dark">STEP 3　聞いて書く</div>
+          <div class="step-card-desc dark">音声を聞いて紙に書いて確認</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1 -->
+<div id="screen-step1" class="screen">
+  <div class="app-header">
+    <button class="btn-back" onclick="goStudentHome()">← 戻る</button>
+    <div class="header-title">STEP 1　聞いてリピート</div>
+    <div class="header-badge">第1課</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="setStep1Tab('syllable',this)">音節</button>
+    <button class="tab-btn" onclick="setStep1Tab('word',this)">単語</button>
+  </div>
+  <div class="step-content">
+    <div class="item-count" id="s1-count"></div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="s1-progress"></div></div>
+    <div class="card-big">
+      <div class="char-display" id="s1-char">아</div>
+      <div class="jp-label" id="s1-jp"></div>
+      <button class="btn-speak" id="s1-speak-btn" onclick="speak1()">🔊 聞く</button>
+    </div>
+    <div class="nav-row">
+      <button class="btn-nav btn-prev" onclick="step1Prev()">← 前へ</button>
+      <button class="btn-nav btn-next-s" onclick="step1Next()">次へ →</button>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2: 듣고 고르기 -->
+<div id="screen-step2" class="screen">
+  <div class="app-header">
+    <button class="btn-back" onclick="goStudentHome()">← 戻る</button>
+    <div class="header-title">STEP 2　聞いて選ぶ</div>
+    <div class="header-badge">第1課</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="setStep2Tab('syllable',this)">音節</button>
+    <button class="tab-btn" onclick="setStep2Tab('word',this)">単語</button>
+  </div>
+  <div class="step-content" id="s2-content"></div>
+</div>
+
+<!-- STEP 3: 듣고 쓰기 -->
+<div id="screen-step3" class="screen">
+  <div class="app-header">
+    <button class="btn-back" onclick="goStudentHome()">← 戻る</button>
+    <div class="header-title">STEP 3　聞いて書く</div>
+    <div class="header-badge">第1課</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="setStep3Tab('syllable',this)">音節</button>
+    <button class="tab-btn" onclick="setStep3Tab('word',this)">単語</button>
+  </div>
+  <div class="step-content">
+    <div class="dictation-card">
+      <span class="q-number" id="s3-qnum">問題 1</span>
+      <div class="dictation-instruction">音声を聞いて、聞こえたハングルを紙に書いてください。</div>
+      <button class="btn-speak" id="s3-speak-btn" onclick="speak3()">🔊 音声を再生</button>
+      <div class="answer-reveal" id="s3-answer">
+        <div class="answer-char" id="s3-answer-char"></div>
+        <div class="answer-jp" id="s3-answer-jp"></div>
+      </div>
+      <button class="btn-reveal" id="s3-reveal-btn" onclick="revealAnswer()">✅ 答えを確認</button>
+      <button class="btn-next-dict" id="s3-next-btn" onclick="step3Next()">次の問題 →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CURRICULUM={
+1:{
+  syllables:["아","어","오","우","으","이"],
+  words:[
+    {kr:"이",jp:"ニ"},
+    {kr:"오",jp:"五"},
+    {kr:"아이",jp:"子ども"},
+    {kr:"오이",jp:"キュウリ"}
+  ]
+},
+2:{
+  syllables:["가","나","다","라","마","거","너","더","러","머","고","노","도","로","모","구","누","두","루","무","그","느","드","르","므","기","니","디","리","미"],
+  words:[
+    {kr:"고기",jp:"肉"},
+    {kr:"구두",jp:"靴"},
+    {kr:"나이",jp:"年齢"},
+    {kr:"도로",jp:"道路"},
+    {kr:"다리",jp:"脚・橋"},
+    {kr:"라디오",jp:"ラジオ"},
+    {kr:"머리",jp:"頭"},
+    {kr:"나무",jp:"木"}
+  ]
+},
+3:{
+  syllables:["바","사","아","자","하","버","서","어","저","허","보","소","오","조","호","부","수","우","주","후","브","스","으","즈","흐","비","시","이","지","히"],
+  words:[
+    {kr:"바다",jp:"海"},
+    {kr:"나비",jp:"蝶々"},
+    {kr:"두부",jp:"豆腐"},
+    {kr:"가수",jp:"歌手"},
+    {kr:"도시",jp:"都市"},
+    {kr:"바지",jp:"ズボン"},
+    {kr:"지도",jp:"地図"},
+    {kr:"하나",jp:"一つ"}
+  ]
+},
+4:{
+  syllables:["야","여","요","유","애","에","예","얘","교","규","개","게","뉴","내","네","대","데","려","료","류","래","며","매","벼","뷰","배","샤","세","쟤","채","체","케","튜","태","효","혜","례","계","걔"],
+  words:[
+    {kr:"야구",jp:"野球"},
+    {kr:"여자",jp:"女"},
+    {kr:"요리",jp:"料理"},
+    {kr:"우유",jp:"牛乳"},
+    {kr:"개",jp:"犬"},
+    {kr:"해",jp:"太陽"},
+    {kr:"세수",jp:"顔洗い"},
+    {kr:"시계",jp:"時計"},
+    {kr:"세계",jp:"世界"},
+    {kr:"얘기",jp:"話"},
+    {kr:"노래",jp:"歌"},
+    {kr:"예",jp:"はい・例"},
+    {kr:"새우",jp:"エビ"},
+    {kr:"어제",jp:"昨日"}
+  ]
+},
+5:{
+  syllables:["카","타","파","차","코","키","터","투","피","패","추","치","채","체"],
+  words:[
+    {kr:"코",jp:"鼻"},
+    {kr:"카드",jp:"カード"},
+    {kr:"토마토",jp:"トマト"},
+    {kr:"기타",jp:"ギター"},
+    {kr:"파리",jp:"パリ"},
+    {kr:"피아노",jp:"ピアノ"},
+    {kr:"고추",jp:"唐辛子"},
+    {kr:"치즈",jp:"チーズ"},
+    {kr:"커피",jp:"コーヒー"},
+    {kr:"포도",jp:"ブドウ"},
+    {kr:"피부",jp:"皮膚"}
+  ]
+},
+6:{
+  syllables:["까","따","빠","싸","짜","깨","또","뜨","띠","때","빠","뽀","쁘","빼","쏘","쓰","씨","쎄","짜","찌","째","쩨"],
+  words:[
+    {kr:"까치",jp:"カササギ"},
+    {kr:"꼬리",jp:"尻尾"},
+    {kr:"뽀뽀",jp:"チュー"},
+    {kr:"오빠",jp:"お兄さん"},
+    {kr:"싸다",jp:"安い"},
+    {kr:"찌개",jp:"チゲ"},
+    {kr:"가짜",jp:"偽物"},
+    {kr:"아저씨",jp:"おじさん"},
+    {kr:"허리띠",jp:"ベルト"},
+    {kr:"이따가",jp:"後で"},
+    {kr:"쓰레기",jp:"ゴミ"}
+  ]
+},
+7:{
+  syllables:["와","워","왜","웨","외","위","의","과","화","뇌","돼","뤼","뭐","봐","뷔","솨","쇠","죄","쥐","취","화","회","콰","퇴","꽤","뛰","궤"],
+  words:[
+    {kr:"와이",jp:"Y"},
+    {kr:"과자",jp:"お菓子"},
+    {kr:"왜",jp:"なぜ"},
+    {kr:"뭐",jp:"何"},
+    {kr:"샤워",jp:"シャワー"},
+    {kr:"교과서",jp:"教科書"},
+    {kr:"돼지",jp:"豚"},
+    {kr:"웨이터",jp:"ウェイター"},
+    {kr:"외우다",jp:"暗記する"},
+    {kr:"회사",jp:"会社"},
+    {kr:"위치",jp:"位置"},
+    {kr:"취미",jp:"趣味"},
+    {kr:"의사",jp:"医者"},
+    {kr:"회의",jp:"会議"},
+    {kr:"여의도",jp:"汝矣島"},
+    {kr:"사과",jp:"リンゴ"},
+    {kr:"의미",jp:"意味"},
+    {kr:"해외",jp:"海外"},
+    {kr:"귀",jp:"耳"}
+  ]
+},
+8:{
+  syllables:["악","안","암","앙","알","압","앞","앋","앝","앗","았","찾","읗","각","간","감","강","갈","갑","갚","갇","같","갔","갓","갖","갛"],
+  words:[
+    {kr:"책",jp:"本"},
+    {kr:"부엌",jp:"キッチン"},
+    {kr:"밖",jp:"外"},
+    {kr:"안",jp:"中"},
+    {kr:"돈",jp:"お金"},
+    {kr:"시간",jp:"時間"},
+    {kr:"김",jp:"海苔"},
+    {kr:"사람",jp:"人"},
+    {kr:"마음",jp:"心"},
+    {kr:"강",jp:"川"},
+    {kr:"방",jp:"部屋"},
+    {kr:"사랑",jp:"愛"},
+    {kr:"말",jp:"言葉"},
+    {kr:"물",jp:"水"},
+    {kr:"서울",jp:"ソウル"},
+    {kr:"집",jp:"家"},
+    {kr:"앞",jp:"前"},
+    {kr:"밥",jp:"ご飯"},
+    {kr:"곧",jp:"すぐ"},
+    {kr:"밑",jp:"下"},
+    {kr:"맛",jp:"味"},
+    {kr:"꽃",jp:"花"},
+    {kr:"낮",jp:"昼"},
+    {kr:"히읗",jp:"文字の名称"},
+    {kr:"낚시",jp:"釣り"},
+    {kr:"일본",jp:"日本"},
+    {kr:"김치",jp:"キムチ"},
+    {kr:"숲",jp:"森"},
+    {kr:"끝",jp:"末・終わり"},
+    {kr:"받침",jp:"パッチム"},
+    {kr:"옷",jp:"服"},
+    {kr:"선생님",jp:"先生"},
+    {kr:"갈비",jp:"カルビ"},
+    {kr:"군대",jp:"軍隊"},
+    {kr:"울산",jp:"蔚山"},
+    {kr:"광주",jp:"光州"}
+  ]
+},
+9:{
+  syllables:[],
+  words:[
+    {kr:"교토",jp:"京都"},
+    {kr:"센다이",jp:"仙台"},
+    {kr:"후쿠오카",jp:"福岡"},
+    {kr:"아키타",jp:"秋田"},
+    {kr:"삿포로",jp:"札幌"},
+    {kr:"스즈키",jp:"鈴木"},
+    {kr:"도쿄",jp:"東京"},
+    {kr:"오사카",jp:"大阪"},
+    {kr:"홋카이도",jp:"北海道"},
+    {kr:"시즈오카",jp:"静岡"},
+    {kr:"마쓰야마",jp:"松山"},
+    {kr:"고치",jp:"高知"},
+    {kr:"사토",jp:"佐藤"},
+    {kr:"와타나베",jp:"渡辺"},
+    {kr:"다나카",jp:"田中"},
+    {kr:"다카하시",jp:"高橋"},
+    {kr:"이토",jp:"伊藤"},
+    {kr:"다카하타",jp:"高畑"},
+    {kr:"와다",jp:"和田"}
+  ]
+}
+};
+
+let currentLesson=1;
+let data=CURRICULUM[currentLesson];
+
+// 과 선택
+document.querySelectorAll('.lesson-btn').forEach((btn,i)=>{
+  btn.addEventListener('click',()=>{
+    const n=i+1;
+    if(!CURRICULUM[n]) return;
+    currentLesson=n;
+    data=CURRICULUM[n];
+    document.querySelectorAll('.lesson-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.header-badge').forEach(b=>b.textContent='第'+n+'課');
+  });
+});
+});
+
+// 음절/단어 모두 mp3 (없으면 TTS 폴백)
+function playMp3(text, type){
+  const path=`audio/${currentLesson}_${type}_${text}.mp3`;
+  const audio=new Audio(path);
+  audio.onerror=()=>ttsSpeak(text);
+  audio.play().catch(()=>ttsSpeak(text));
+  return audio;
+}
+function ttsSpeak(text){
+  if(!window.speechSynthesis) return null;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='ko-KR'; u.rate=0.85;
+  window.speechSynthesis.speak(u);
+  return u;
+}
+function speakKorean(text, isWord=false){
+  return playMp3(text, isWord?'w':'s');
+}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function goStart(){showScreen('screen-start');}
+function goStudentHome(){showScreen('screen-student-home');}
+function goTeacher(){
+  // 음절이 없으면 단어 탭으로 시작
+  teacherTab=data.syllables.length>0?'syllable':'word';
+  teacherUsed=[];
+  document.getElementById('drill-char').textContent='？';
+  document.getElementById('drill-hint').textContent='ボタンを押してスタート';
+  document.getElementById('drill-counter').textContent='';
+  const hasSyl=data.syllables.length>0;
+  document.querySelectorAll('#screen-teacher .tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active',hasSyl?i===0:i===1);
+    b.style.display=(i===0&&!hasSyl)?'none':'';
+  });
+  showScreen('screen-teacher');
+}
+function goStep(n){if(n===1){initStep1();showScreen('screen-step1');}else if(n===2){initStep2();showScreen('screen-step2');}else if(n===3){initStep3();showScreen('screen-step3');}}
+
+// TEACHER
+let teacherTab='syllable',teacherUsed=[];
+function setTeacherTab(tab,btn){teacherTab=tab;teacherUsed=[];document.querySelectorAll('#screen-teacher .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('drill-char').textContent='？';document.getElementById('drill-hint').textContent='ボタンを押してスタート';document.getElementById('drill-counter').textContent='';}
+function nextDrill(){const items=teacherTab==='syllable'?data.syllables:data.words.map(w=>w.kr);if(teacherUsed.length===items.length)teacherUsed=[];let idx;do{idx=Math.floor(Math.random()*items.length);}while(teacherUsed.includes(idx)&&teacherUsed.length<items.length);teacherUsed.push(idx);const char=items[idx];const el=document.getElementById('drill-char');el.textContent=char;el.className='drill-char'+(char.length>=3?' word-lg':char.length===2?' word':'');document.getElementById('drill-hint').textContent=teacherTab==='syllable'?'この音節を読んでみよう':'この単語を読んでみよう';document.getElementById('drill-counter').textContent=teacherUsed.length+' / '+items.length;}
+
+// STEP 1
+let s1Tab='syllable',s1Items=[],s1Idx=0,s1Shuffled=[];
+function initStep1(){
+  const hasSyl=data.syllables.length>0;
+  s1Tab=hasSyl?'syllable':'word';
+  document.querySelectorAll('#screen-step1 .tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active',hasSyl?i===0:i===1);
+    b.style.display=(i===0&&!hasSyl)?'none':'';
+  });
+  loadStep1();
+}
+function setStep1Tab(tab,btn){s1Tab=tab;document.querySelectorAll('#screen-step1 .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadStep1();}
+function loadStep1(){
+  s1Items=s1Tab==='syllable'?data.syllables.map(s=>({kr:s,jp:''})):data.words;
+  if(s1Items.length===0){s1Items=data.words;}
+  s1Shuffled=shuffle([...s1Items]);s1Idx=0;renderStep1();
+}
+function renderStep1(){const item=s1Shuffled[s1Idx];const el=document.getElementById('s1-char');el.textContent=item.kr;el.className='char-display'+(item.kr.length>=3?' word-size-lg':item.kr.length===2?' word-size':'');document.getElementById('s1-jp').textContent=item.jp||'';document.getElementById('s1-count').textContent=(s1Idx+1)+' / '+s1Shuffled.length;document.getElementById('s1-progress').style.width=((s1Idx+1)/s1Shuffled.length*100)+'%';document.getElementById('s1-speak-btn').classList.remove('speaking');}
+function speak1(){const btn=document.getElementById('s1-speak-btn');btn.classList.add('speaking');const isWord=s1Tab==='word';const u=speakKorean(s1Shuffled[s1Idx].kr,isWord);if(u&&u.onend!==undefined)u.onend=()=>btn.classList.remove('speaking');else setTimeout(()=>btn.classList.remove('speaking'),1200);}
+function step1Prev(){if(s1Idx>0){s1Idx--;renderStep1();}}
+function step1Next(){if(s1Idx<s1Shuffled.length-1){s1Idx++;}else{s1Idx=0;s1Shuffled=shuffle([...s1Items]);}renderStep1();}
+
+// STEP 2: 듣고 고르기
+let s2Tab='syllable',s2Questions=[],s2Idx=0,s2Correct=0,s2Timer=null,s2TimerVal=0;
+const S2_TIME_SYL=3,S2_TIME_WRD=5,S2_TOTAL=5;
+function initStep2(){
+  const hasSyl=data.syllables.length>0;
+  s2Tab=hasSyl?'syllable':'word';
+  document.querySelectorAll('#screen-step2 .tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active',hasSyl?i===0:i===1);
+    b.style.display=(i===0&&!hasSyl)?'none':'';
+  });
+  loadStep2();
+}
+function setStep2Tab(tab,btn){s2Tab=tab;document.querySelectorAll('#screen-step2 .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadStep2();}
+function loadStep2(){const pool=s2Tab==='syllable'?data.syllables.map(s=>({kr:s,jp:''})):data.words;s2Questions=shuffle([...pool]).slice(0,Math.min(S2_TOTAL,pool.length));s2Idx=0;s2Correct=0;renderStep2();}
+function getChoices(correct,pool){
+  // 같은 글자수 항목만 오답 후보로 사용
+  const sameLen=pool.filter(p=>p.kr!==correct.kr && p.kr.length===correct.kr.length);
+  // 같은 글자수가 2개 미만이면 글자수 무관하게 선택
+  const candidates=sameLen.length>=2?sameLen:pool.filter(p=>p.kr!==correct.kr);
+  return shuffle([correct,...shuffle(candidates).slice(0,2)]);
+}
+function renderStep2(){
+  clearInterval(s2Timer);
+  const pool=s2Tab==='syllable'?data.syllables.map(s=>({kr:s,jp:''})):data.words;
+  if(s2Idx>=s2Questions.length){renderStep2Result();return;}
+  const q=s2Questions[s2Idx];const choices=getChoices(q,pool);
+  const timeLimit=s2Tab==='syllable'?S2_TIME_SYL:S2_TIME_WRD;s2TimerVal=timeLimit;
+  document.getElementById('s2-content').innerHTML=`
+  <div class="quiz-header"><div class="quiz-score">正解 <span>${s2Correct}</span> / ${s2Idx}</div><div style="font-size:14px;color:var(--text2);font-weight:600;">問題 ${s2Idx+1} / ${s2Questions.length}</div></div>
+  <div class="timer-bar-wrap"><div class="timer-bar" id="s2-timer-bar" style="width:100%"></div></div>
+  <div class="quiz-card">
+    <div class="quiz-instruction">音声を聞いて、正しい文字を選んでください</div>
+    <button class="btn-quiz-speak" onclick="speakKorean('${q.kr}', s2Tab==='word')">🔊 もう一度聞く</button>
+    <div class="choices">${choices.map((c,i)=>`<button class="choice-btn" id="c2-${i}" onclick="checkAnswer2('${c.kr}','${q.kr}',${choices.length})">${c.kr}</button>`).join('')}</div>
+  </div>`;
+  setTimeout(()=>speakKorean(q.kr, s2Tab==='word'),400);
+  const bar=document.getElementById('s2-timer-bar');
+  s2Timer=setInterval(()=>{s2TimerVal-=0.1;const pct=Math.max(0,(s2TimerVal/timeLimit)*100);bar.style.width=pct+'%';if(pct<30)bar.classList.add('danger');if(s2TimerVal<=0){clearInterval(s2Timer);timeUp2(q.kr,choices.length);}},100);
+}
+function checkAnswer2(chosen,correct,n){clearInterval(s2Timer);if(chosen===correct)s2Correct++;for(let i=0;i<n;i++){const btn=document.getElementById('c2-'+i);if(!btn)continue;btn.classList.add('disabled');if(btn.textContent===correct)btn.classList.add('correct');else if(btn.textContent===chosen&&chosen!==correct)btn.classList.add('wrong');}setTimeout(()=>{s2Idx++;renderStep2();},900);}
+function timeUp2(correct,n){for(let i=0;i<n;i++){const btn=document.getElementById('c2-'+i);if(!btn)continue;btn.classList.add('disabled');if(btn.textContent===correct)btn.classList.add('correct');}setTimeout(()=>{s2Idx++;renderStep2();},900);}
+function renderStep2Result(){const pct=Math.round((s2Correct/s2Questions.length)*100);const emoji=pct>=80?'🎉':pct>=60?'😊':'😅';document.getElementById('s2-content').innerHTML=`<div class="quiz-result"><div class="result-emoji">${emoji}</div><div class="result-score">${s2Correct} / ${s2Questions.length}</div><div class="result-label">正解率 ${pct}%</div><div class="result-detail">${pct>=80?'素晴らしい！':pct>=60?'よくできました！':'もう一度練習しましょう！'}</div><button class="btn-retry" onclick="loadStep2()">もう一度</button></div>`;}
+
+// STEP 3: 듣고 쓰기
+let s3Tab='syllable',s3Items=[],s3Shuffled=[],s3Idx=0;
+function initStep3(){
+  const hasSyl=data.syllables.length>0;
+  s3Tab=hasSyl?'syllable':'word';
+  document.querySelectorAll('#screen-step3 .tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active',hasSyl?i===0:i===1);
+    b.style.display=(i===0&&!hasSyl)?'none':'';
+  });
+  loadStep3();
+}
+function setStep3Tab(tab,btn){s3Tab=tab;document.querySelectorAll('#screen-step3 .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadStep3();}
+function loadStep3(){s3Items=s3Tab==='syllable'?data.syllables.map(s=>({kr:s,jp:''})):data.words;s3Shuffled=shuffle([...s3Items]);s3Idx=0;renderStep3();}
+function renderStep3(){document.getElementById('s3-qnum').textContent='問題 '+(s3Idx+1)+' / '+s3Shuffled.length;document.getElementById('s3-answer-char').textContent=s3Shuffled[s3Idx].kr;document.getElementById('s3-answer-jp').textContent=s3Shuffled[s3Idx].jp||'';document.getElementById('s3-answer').classList.remove('show');document.getElementById('s3-reveal-btn').style.display='block';document.getElementById('s3-next-btn').classList.remove('show');document.getElementById('s3-speak-btn').classList.remove('speaking');}
+function speak3(){const btn=document.getElementById('s3-speak-btn');btn.classList.add('speaking');const isWord=s3Tab==='word';const u=speakKorean(s3Shuffled[s3Idx].kr,isWord);if(u&&u.onend!==undefined)u.onend=()=>btn.classList.remove('speaking');else setTimeout(()=>btn.classList.remove('speaking'),1200);}
+function revealAnswer(){document.getElementById('s3-answer').classList.add('show');document.getElementById('s3-reveal-btn').style.display='none';document.getElementById('s3-next-btn').classList.add('show');}
+function step3Next(){s3Idx++;if(s3Idx>=s3Shuffled.length){s3Idx=0;s3Shuffled=shuffle([...s3Items]);}renderStep3();}
+</script>
+</body>
+</html>
